@@ -21,3 +21,9 @@ $router->get('/ping', function () use ($router) {
     // return $results;
 });
 
+
+$router->group(['middleware' => 'auth'], function () use ($router) {
+	
+	//User
+	$router->get('/user', 'User@getUser');
+});
