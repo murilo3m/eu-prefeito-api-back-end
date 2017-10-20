@@ -65,8 +65,22 @@ class User extends Controller
     public function delUser(Request $request, $cpf){
         $customer = DB::table('user')
                     ->where('cpf', $cpf)
-                    ->update(['active' => FALSE]);                
+                    ->update(['active' => FALSE,
+                            'update_at' => date('Y-m-d H:i')]);                
 
         return response()->json(['message' => 'user deleted'], 200);           
+    }
+
+    public function updateUser(Request $request, $cpf){
+        $customer = DB::table('user')
+                    ->where('cpf', $cpf)                    
+                    ->update(['name' => $request->input('name'), 
+                            'phone' => $request->input('phone'),
+                            'password' => $request->input('password'),
+                            'email' => $request->input('email'),
+                            'update_at' => date('Y-m-d H:i'),
+                            'active' => $request->input('active')]);
+
+        return response()->json(['message' => 'user updated'], 200);
     }
 }
