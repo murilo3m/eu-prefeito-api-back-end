@@ -30,4 +30,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 	$router->post('/user', 'User@addUser');
 	$router->delete('/user/{id}', 'User@delUser');	
 	$router->put('/user/{id}', 'User@updateUser');
+
+	//Solicitation
+	$router->post('/solicitation', 'Solicitation@addSolicitation');
+
 });
