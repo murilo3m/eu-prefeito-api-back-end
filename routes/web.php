@@ -23,7 +23,8 @@ $router->get('/ping', function () use ($router) {
 
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
-	
+
 	//User
-	$router->get('/user', 'User@getUser');
+	$router->get('/user/{id}', 'User@getUser');
+	$router->post('/user', 'User@addUser');
 });
