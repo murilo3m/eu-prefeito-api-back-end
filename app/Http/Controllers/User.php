@@ -22,9 +22,16 @@ class User extends Controller
         $customer = DB::table('user')
                     ->where('cpf', $cpf)
                     ->first();
-        var_dump($customer);die;
+        // var_dump($customer);die;
+        // return response()->json("user!");
+        return response()->json($customer);                
+    }
 
-        return response()->json("user!");
+    public function getUsers(){
+        $customer = DB::table('user')
+                    ->orderBy('user_id')
+                    ->distinct()->get();
+        return response()->json($customer);                
     }
 
     public function addUser(Request $request){
@@ -45,10 +52,21 @@ class User extends Controller
                 'name' => $request->input('name'), 
                 'email' => $request->input('email'), 
                 'phone' => $request->input('phone'), 
-                'password' => $request->input('password'), 
+                'password' => md5($request->input('password')),
+                'active' => TRUE,
+                'entry_date' => date('Y-m-d H:i'),
+                'update_at' =>  NULL,
             ]);
         }
 
-        return response()->json("user!");
+        return response()->json(['message' => 'user created'], 201);
+    }
+
+    public function delUser(Request $request, $cpf){
+        $customer = DB::table('user')
+                    ->where('cpf', $cpf)
+                    ->update(['active' => FALSE]);                
+
+        return response()->json(['message' => 'user deleted'], 200);           
     }
 }

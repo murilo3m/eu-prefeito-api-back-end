@@ -10,6 +10,9 @@ cpf			VARCHAR(500),
 phone 		VARCHAR(500),
 password	VARCHAR(500),
 email		VARCHAR(500),
+active		BOOLEAN,
+entry_date 	VARCHAR(100),
+update_at 	VARCHAR(100),
 CONSTRAINT fk_tb_user_user_id PRIMARY KEY (user_id)
 );
 
