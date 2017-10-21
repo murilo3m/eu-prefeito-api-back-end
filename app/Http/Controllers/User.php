@@ -47,19 +47,27 @@ class User extends Controller
             $error = $this->getValidateMessages($validator->messages()->getMessages());
             return response()->json(['message' => $error], 422);
         } else {
-            DB::table('user')->insert([
-                'cpf' => $request->input('cpf'), 
-                'name' => $request->input('name'), 
-                'email' => $request->input('email'), 
-                'phone' => $request->input('phone'), 
-                'password' => md5($request->input('password')),
-                'active' => TRUE,
-                'entry_date' => date('Y-m-d H:i'),
-                'update_at' =>  NULL,
-            ]);
+            $hasCustomer =  DB::table('user')
+                            ->where('cpf', $request->input('cpf'))
+                            ->first();
+            if(!$hasCustomer){
+                DB::table('user')->insert([
+                    'cpf' => $request->input('cpf'), 
+                    'name' => $request->input('name'), 
+                    'email' => $request->input('email'), 
+                    'phone' => $request->input('phone'), 
+                    'password' => md5($request->input('password')),
+                    'active' => TRUE,
+                    'entry_date' => date('Y-m-d H:i'),
+                    'update_at' =>  NULL,
+                ]);
+
+                return response()->json(['message' => 'user created'], 201);
+            } else {
+                return response()->json(['message' => 'there is already user with this CPF'], 422);
+            }
         }
 
-        return response()->json(['message' => 'user created'], 201);
     }
 
     public function delUser(Request $request, $cpf){
