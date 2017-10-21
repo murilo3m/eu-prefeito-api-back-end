@@ -19,19 +19,23 @@ class User extends Controller
     }
 
     public function getUser(Request $request, $cpf){
-        $customer = DB::table('user')
+        $user = DB::table('user')
                     ->where('cpf', $cpf)
                     ->first();
-        // var_dump($customer);die;
-        // return response()->json("user!");
-        return response()->json($customer);                
+
+        if($user){
+            return response()->json($user);
+        } else {
+            return response()->json(['user' => false, 'message' => 'there is no user with this cpf'], 400);
+        }
+
     }
 
     public function getUsers(){
-        $customer = DB::table('user')
+        $user = DB::table('user')
                     ->orderBy('user_id')
                     ->distinct()->get();
-        return response()->json($customer);                
+        return response()->json($user);                
     }
 
     public function addUser(Request $request){
@@ -47,10 +51,10 @@ class User extends Controller
             $error = $this->getValidateMessages($validator->messages()->getMessages());
             return response()->json(['message' => $error], 422);
         } else {
-            $hasCustomer =  DB::table('user')
+            $hasUser =  DB::table('user')
                             ->where('cpf', $request->input('cpf'))
                             ->first();
-            if(!$hasCustomer){
+            if(!$hasUser){
                 DB::table('user')->insert([
                     'cpf' => $request->input('cpf'), 
                     'name' => $request->input('name'), 
@@ -72,25 +76,42 @@ class User extends Controller
     }
 
     public function delUser(Request $request, $cpf){
-        $customer = DB::table('user')
+        $hasUser = DB::table('user')
                     ->where('cpf', $cpf)
-                    ->update(['active' => FALSE,
-                            'update_at' => date('Y-m-d H:i')]);                
+                    ->first();
 
-        return response()->json(['message' => 'user deleted'], 200);           
+        if($hasUser){ 
+            $user = DB::table('user')
+                        ->where('cpf', $cpf)
+                        ->update(['active' => FALSE,
+                                'update_at' => date('Y-m-d H:i')]);                
+            
+            return response()->json(['message' => 'user deleted'], 200);
+        } else {
+            return response()->json(['message' => 'there is no user with this CPF'], 422);
+        }
+
     }
 
     public function updateUser(Request $request, $cpf){
-        $customer = DB::table('user')
-                    ->where('cpf', $cpf)                    
-                    ->update(['name' => $request->input('name'), 
-                            'phone' => $request->input('phone'),
-                            'password' => $request->input('password'),
-                            'email' => $request->input('email'),
-                            'user_group' => $request->input('user_group'),
-                            'update_at' => date('Y-m-d H:i'),
-                            'active' => $request->input('active')]);
+        $hasUser = DB::table('user')
+                    ->where('cpf', $cpf)
+                    ->first();
 
-        return response()->json(['message' => 'user updated'], 200);
+        if($hasUser){
+            $user = DB::table('user')
+                        ->where('cpf', $cpf)                    
+                        ->update(['name' => $request->input('name'), 
+                                'phone' => $request->input('phone'),
+                                'password' => $request->input('password'),
+                                'email' => $request->input('email'),
+                                'user_group' => $request->input('user_group'),
+                                'update_at' => date('Y-m-d H:i'),
+                                'active' => $request->input('active')]);
+
+            return response()->json(['message' => 'user updated'], 200);
+        } else {
+            return response()->json(['message' => 'there is no user with this CPF'], 422);
+        }
     }
 }

@@ -16,7 +16,7 @@ $router->get('/', function () use ($router) {
 });
 
 $router->get('/ping', function () use ($router) {
-    return response()->json("Pong!");
+    return response()->json("Pong!", 418);
     // $results = app('db')->select("SELECT * FROM tb_users");
     // return $results;
 });
