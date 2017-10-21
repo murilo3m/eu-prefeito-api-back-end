@@ -33,5 +33,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
 	//Solicitation
 	$router->post('/solicitation', 'Solicitation@addSolicitation');
+	$router->get('/solicitation', 'Solicitation@getSolicitations');
+	$router->get('/solicitation/{id}', 'Solicitation@getSolicitation');
+	$router->put('/solicitation/{id}', 'Solicitation@updateSolicitation');
 
 });
