@@ -81,10 +81,10 @@ class User extends Controller
                     ->first();
 
         if($hasUser){ 
-            $user = DB::table('user')
-                        ->where('cpf', $cpf)
-                        ->update(['active' => FALSE,
-                                'update_at' => date('Y-m-d H:i')]);                
+            DB::table('user')
+            ->where('cpf', $cpf)
+            ->update(['active' => FALSE,
+                    'update_at' => date('Y-m-d H:i')]);                
             
             return response()->json(['message' => 'user deleted'], 200);
         } else {
@@ -99,15 +99,15 @@ class User extends Controller
                     ->first();
 
         if($hasUser){
-            $user = DB::table('user')
-                        ->where('cpf', $cpf)                    
-                        ->update(['name' => $request->input('name'), 
-                                'phone' => $request->input('phone'),
-                                'password' => $request->input('password'),
-                                'email' => $request->input('email'),
-                                'user_group' => $request->input('user_group'),
-                                'update_at' => date('Y-m-d H:i'),
-                                'active' => $request->input('active')]);
+            DB::table('user')
+            ->where('cpf', $cpf)                    
+            ->update(['name' => $request->input('name'), 
+                    'phone' => $request->input('phone'),
+                    'password' => $request->input('password'),
+                    'email' => $request->input('email'),
+                    'user_group' => $request->input('user_group'),
+                    'update_at' => date('Y-m-d H:i'),
+                    'active' => $request->input('active')]);
 
             return response()->json(['message' => 'user updated'], 200);
         } else {
