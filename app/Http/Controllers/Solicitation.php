@@ -28,7 +28,7 @@ class Solicitation extends Controller
 
         if ($validator->fails()) {
             $error = $this->getValidateMessages($validator->messages()->getMessages());
-            return response()->json(['message' => $error], 422);
+            return response()->json(['status' => 'error', 'message' => $error], 422);
         } else {
             DB::table('solicitation')->insert([
                 'user_id' => $request->input('user_id'),                
@@ -43,14 +43,14 @@ class Solicitation extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'solicitation created'], 201);
+        return response()->json(['status' => 'success', 'message' => 'solicitation created'], 201);
     }    
 
     public function getSolicitations(){
         $solicitation = DB::table('solicitation')
         ->orderBy('user_id')
         ->distinct()->get();
-        return response()->json($solicitation);                
+        return response()->json(['data' => $solicitation]);                
     }
 
     public function getSolicitation(Request $request, $id){
@@ -59,9 +59,9 @@ class Solicitation extends Controller
         ->first();
         
         if ($solicitation){
-            return response()->json($solicitation);    
+            return response()->json(['status' => 'success', 'data' => $solicitation]);    
         }else{
-            return response()->json(['message' => 'there is no solicitation'], 400);
+            return response()->json(['status' => 'error', 'message' => 'there is no solicitation'], 400);
         }        
     }
 
@@ -82,9 +82,9 @@ class Solicitation extends Controller
                 'status' => $request->input('status'),
                 'update_at' => date('Y-m-d H:i')]);
 
-            return response()->json(['message' => 'solicitation updated'], 200);
+            return response()->json(['status' => 'success', 'message' => 'solicitation updated'], 200);
         } else {
-            return response()->json(['message' => 'there is no solicitation with this id'], 422);
+            return response()->json(['status' => 'error', 'message' => 'there is no solicitation with this id'], 422);
         }
     }
 
@@ -96,7 +96,7 @@ class Solicitation extends Controller
 
         if ($validator->fails()) {
             $error = $this->getValidateMessages($validator->messages()->getMessages());
-            return response()->json(['message' => $error], 422);
+            return response()->json(['status' => 'error', 'message' => $error], 422);
         } else {
             DB::table('solicitation_votes')->insert([
                 'solicitation_id' => $request->input('solicitation_id'),                
@@ -106,6 +106,6 @@ class Solicitation extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'vote created'], 201);
+        return response()->json(['status' => 'success', 'message' => 'vote created'], 201);
     }
 }

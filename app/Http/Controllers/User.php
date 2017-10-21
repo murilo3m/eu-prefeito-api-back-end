@@ -24,9 +24,9 @@ class User extends Controller
                     ->first();
 
         if($user){
-            return response()->json($user);
+            return response()->json(['status' => 'success', 'data' => $user]);
         } else {
-            return response()->json(['user' => false, 'message' => 'there is no user with this cpf'], 400);
+            return response()->json(['status' => 'error', 'message' => 'there is no user with this cpf'], 400);
         }
 
     }
@@ -35,7 +35,7 @@ class User extends Controller
         $user = DB::table('user')
                     ->orderBy('user_id')
                     ->distinct()->get();
-        return response()->json($user);                
+        return response()->json(['data' => $user]);
     }
 
     public function addUser(Request $request){
@@ -49,7 +49,7 @@ class User extends Controller
 
         if ($validator->fails()) {
             $error = $this->getValidateMessages($validator->messages()->getMessages());
-            return response()->json(['message' => $error], 422);
+            return response()->json(['status' => 'error', 'message' => $error], 422);
         } else {
             $hasUser =  DB::table('user')
                             ->where('cpf', $request->input('cpf'))
@@ -67,9 +67,9 @@ class User extends Controller
                     'update_at' =>  NULL,
                 ]);
 
-                return response()->json(['message' => 'user created'], 201);
+                return response()->json(['status' => 'success', 'message' => 'user created'], 201);
             } else {
-                return response()->json(['message' => 'there is already user with this CPF'], 422);
+                return response()->json(['status' => 'error', 'message' => 'there is already user with this CPF'], 422);
             }
         }
 
@@ -86,9 +86,9 @@ class User extends Controller
             ->update(['active' => FALSE,
                     'update_at' => date('Y-m-d H:i')]);                
             
-            return response()->json(['message' => 'user deleted'], 200);
+            return response()->json(['status' => 'success', 'message' => 'user deleted'], 200);
         } else {
-            return response()->json(['message' => 'there is no user with this CPF'], 422);
+            return response()->json(['status' => 'error', 'message' => 'there is no user with this CPF'], 422);
         }
 
     }
@@ -109,9 +109,9 @@ class User extends Controller
                     'update_at' => date('Y-m-d H:i'),
                     'active' => $request->input('active')]);
 
-            return response()->json(['message' => 'user updated'], 200);
+            return response()->json(['status' => 'success', 'message' => 'user updated'], 200);
         } else {
-            return response()->json(['message' => 'there is no user with this CPF'], 422);
+            return response()->json(['status' => 'error', 'message' => 'there is no user with this CPF'], 422);
         }
     }
 }
