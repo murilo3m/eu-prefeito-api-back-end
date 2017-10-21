@@ -37,6 +37,7 @@ solicitation_votes_id	SERIAL,
 solicitation_id			INTEGER,
 user_id					INTEGER,
 vote					VARCHAR(500),
+entry_date		VARCHAR(500),
 CONSTRAINT pk_tb_solicitation_votes_solicitation_votes_id PRIMARY KEY (solicitation_votes_id),
 CONSTRAINT fk_tb_solicitation_votes_solicitation_id FOREIGN KEY (solicitation_id) REFERENCES tb_solicitation (solicitation_id),
 CONSTRAINT fk_tb_solicitation_votes_user_id FOREIGN KEY (user_id) REFERENCES tb_user (user_id)

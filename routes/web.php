@@ -37,4 +37,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 	$router->get('/solicitation/{id}', 'Solicitation@getSolicitation');
 	$router->put('/solicitation/{id}', 'Solicitation@updateSolicitation');
 
+	//Solicitation Votes
+	$router->post('/solicitation/{id}/vote', 'Solicitation@voteSolicitation');
+
 });

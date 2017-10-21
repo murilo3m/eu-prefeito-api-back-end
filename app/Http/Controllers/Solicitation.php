@@ -87,4 +87,25 @@ class Solicitation extends Controller
             return response()->json(['message' => 'there is no solicitation with this id'], 422);
         }
     }
+
+    public function voteSolicitation(Request $request, $id){
+        $validator = Validator::make($request->input(), [
+            'vote' => 'required',            
+            'user_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $error = $this->getValidateMessages($validator->messages()->getMessages());
+            return response()->json(['message' => $error], 422);
+        } else {
+            DB::table('solicitation_votes')->insert([
+                'solicitation_id' => $request->input('solicitation_id'),                
+                'user_id' => $request->input('user_id'), 
+                'vote' => $request->input('vote'),
+                'entry_date' => date('Y-m-d H:i'),
+            ]);
+        }
+
+        return response()->json(['message' => 'vote created'], 201);
+    }
 }
