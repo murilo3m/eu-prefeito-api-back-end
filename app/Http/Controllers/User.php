@@ -57,6 +57,7 @@ class User extends Controller
                     'email' => $request->input('email'), 
                     'phone' => $request->input('phone'), 
                     'password' => md5($request->input('password')),
+                    'user_group' => $request->input('user_group'), 
                     'active' => TRUE,
                     'entry_date' => date('Y-m-d H:i'),
                     'update_at' =>  NULL,
@@ -86,6 +87,7 @@ class User extends Controller
                             'phone' => $request->input('phone'),
                             'password' => $request->input('password'),
                             'email' => $request->input('email'),
+                            'user_group' => $request->input('user_group'),
                             'update_at' => date('Y-m-d H:i'),
                             'active' => $request->input('active')]);
 
