@@ -11,6 +11,10 @@
 |
 */
 
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+}
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
@@ -22,14 +26,14 @@ $router->get('/ping', function () use ($router) {
 });
 
 
-$router->group(['middleware' => 'auth'], function () use ($router) {
+//$router->group(['middleware' => 'cors'], function () use ($router) {
 
 	//User
 	$router->get('/user/{id}', 'User@getUser');
 	$router->get('/user', 'User@getUsers');
-	$router->post('/user', 'User@addUser');
-	$router->delete('/user/{id}', 'User@delUser');	
-	$router->put('/user/{id}', 'User@updateUser');
+	$router->get('/addUser', 'User@addUser');
+	$router->get('/deleteUser/{id}', 'User@delUser');	
+	$router->get('/editUser/{id}', 'User@updateUser');
 
 	//Solicitation
 	$router->post('/solicitation', 'Solicitation@addSolicitation');
@@ -40,4 +44,4 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 	//Solicitation Votes
 	$router->post('/solicitation/{id}/vote', 'Solicitation@voteSolicitation');
 
-});
+//});
